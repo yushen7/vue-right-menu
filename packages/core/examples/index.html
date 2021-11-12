@@ -7,12 +7,21 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="box1" style="height: 300px; background: #ccc;"></div>
-  <div class="box2" style="height: 300px; background: pink;"></div>
-  <div class="box3" style="height: 300px; background: greenyellow;"></div>
+  <div class="box0" style="background: #ccc;"><span>Win10</span></div>
+  <div class="box1" style="background: #6F69AC;"><span>Mac</span></div>
+  <div class="box2" style="background: #95DAC1;"><span>异步 0ms</span></div>
+  <div class="box3" style="background: #FFEBA1;"><span>异步 3000ms</span></div>
+  <div class="box4" style="background: #FD6F96;"><span>限制菜单最大/最小宽度</span></div>
   <script src="../dist/right-menu.umd.js"></script>
   <script>
-
+    function dfs (max) {
+      if (max === 0) return null
+      return [{
+        text: max,
+        type: 'ul',
+        children: dfs(max - 1)
+      }]
+    }
     const base = [
       { type: 'hr' },
       {
@@ -27,13 +36,27 @@
       },
     ]
 
-    // 同步
+    // win10
     new RightMenu({
-      el: '.box1'
+      el: '.box0',
+      theme: 'win10'
     }, [
       {
         type: 'li',
-        text: '同步'
+        text: 'win10',
+      },
+      ...base
+    ])
+
+    // mac
+    new RightMenu({
+      el: '.box1',
+      theme: 'mac'
+    }, [
+      {
+        type: 'ul',
+        text: 'mac',
+        children: dfs(99)
       },
       ...base
     ])
@@ -62,10 +85,68 @@
             },
             ...base
           ])
-        }, 3000)
+        }, 300000)
       })
     })
+
+
+    new RightMenu({
+      el: '.box4',
+      theme: 'mac',
+      minWidth: '0px',
+      maxWidth: '300px'
+    }, [
+      {
+        type: 'li',
+        text: '这是一段文字',
+      },
+      {
+        type: 'li',
+        text: '这是一段很长很长很长很长很长很长很长很长的文字',
+      },
+      {
+        type: 'ul',
+        text: '这是一个列表',
+        children: [
+          { type: 'li', text: '复制' },
+          { type: 'li', text: '粘贴' }
+        ]
+      },
+      ...base
+    ])
 
   </script>
 </body>
 </html>
+<style>
+  body>div {
+    height: 200px;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  body>div::before {
+    content: '';
+    display: block;
+    height: 100%;
+    border-left: 2px dashed rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 33.33%;
+  }
+  body>div::after {
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    border-left: 2px dashed rgba(0, 0, 0, 0.5);
+    right: 33.33%;
+  }
+  div>span {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 5px;
+  }
+</style> 
